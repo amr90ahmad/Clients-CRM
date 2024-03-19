@@ -1,0 +1,12 @@
+- Analytics
+- Export to excel
+
+
+FIX:
+    - Authentication 
+    - user edit form (role, password)
+    - date input 
+    - use-hook-form coercion to string
+    - services CRUD
+    
+    

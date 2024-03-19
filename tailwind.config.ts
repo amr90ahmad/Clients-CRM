@@ -1,20 +1,96 @@
 import type { Config } from "tailwindcss";
 
-const config: Config = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
+const config = {
+    darkMode: ["class"],
+    content: [
+        "./pages/**/*.{ts,tsx}",
+        "./components/**/*.{ts,tsx}",
+        "./app/**/*.{ts,tsx}",
+        "./src/**/*.{ts,tsx}",
+    ],
+    prefix: "",
+    theme: {
+        container: {
+            center: true,
+            padding: "2rem",
+            screens: {
+                "2xl": "1400px",
+            },
+        },
+        extend: {
+            colors: {
+                "primary-1": "#cb3cff",
+                "primary-2": "#0b1739",
+                "border-clr": "#343b4f",
+                "secondary-1": "#101935",
+                "secondary-2": "#343b4f",
+                "secondary-3": "#57c3ff",
+                "secondary-4": "#9a91fb",
+                "secondary-5": "#fdb52a",
+                "neutral-800": "#081028",
+                "neutral-700": "#212c4d",
+                "neutral-600": "#37446b",
+                "neutral-500": "#7e89ac",
+                "neutral-400": "#aeb9e1",
+                "neutral-300": "#d1dbf9",
+                "neutral-200": "#d9e1fa",
+                "neutral-100": "#ffffff",
+                border: "hsl(var(--border))",
+                input: "hsl(var(--input))",
+                ring: "hsl(var(--ring))",
+                background: "hsl(var(--background))",
+                foreground: "hsl(var(--foreground))",
+                primary: {
+                    DEFAULT: "hsl(var(--primary))",
+                    foreground: "hsl(var(--primary-foreground))",
+                },
+                secondary: {
+                    DEFAULT: "hsl(var(--secondary))",
+                    foreground: "hsl(var(--secondary-foreground))",
+                },
+                destructive: {
+                    DEFAULT: "hsl(var(--destructive))",
+                    foreground: "hsl(var(--destructive-foreground))",
+                },
+                muted: {
+                    DEFAULT: "hsl(var(--muted))",
+                    foreground: "hsl(var(--muted-foreground))",
+                },
+                accent: {
+                    DEFAULT: "hsl(var(--accent))",
+                    foreground: "hsl(var(--accent-foreground))",
+                },
+                popover: {
+                    DEFAULT: "hsl(var(--popover))",
+                    foreground: "hsl(var(--popover-foreground))",
+                },
+                card: {
+                    DEFAULT: "hsl(var(--card))",
+                    foreground: "hsl(var(--card-foreground))",
+                },
+            },
+            borderRadius: {
+                lg: "var(--radius)",
+                md: "calc(var(--radius) - 2px)",
+                sm: "calc(var(--radius) - 4px)",
+            },
+            keyframes: {
+                "accordion-down": {
+                    from: { height: "0" },
+                    to: { height: "var(--radix-accordion-content-height)" },
+                },
+                "accordion-up": {
+                    from: { height: "var(--radix-accordion-content-height)" },
+                    to: { height: "0" },
+                },
+            },
+            animation: {
+                "accordion-down": "accordion-down 0.2s ease-out",
+                "accordion-up": "accordion-up 0.2s ease-out",
+            },
+        },
     },
-  },
-  plugins: [],
-};
+    plugins: [require("tailwindcss-animate")],
+} satisfies Config;
+
 export default config;
