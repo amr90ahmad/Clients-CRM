@@ -7,7 +7,7 @@ import Chart from "chart.js/auto";
 Chart.register(CategoryScale);
 
 const months = Array.from({ length: 12 }, (e, i) => {
-    return new Date(null, i + 1, null).toLocaleDateString("en", {
+    return new Date(2000, i + 1, 1).toLocaleDateString("en", {
         month: "short",
     });
 });
