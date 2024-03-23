@@ -75,11 +75,11 @@ export default function Form() {
                                 })}
                             />
                         </div>
-                        {errors.email && typeof errors.email === "object" && (
+                        {/* {errors.email && (
                             <p className='text-red-500'>
-                                {errors.email.message}
+                                {errors?.email?.message}
                             </p>
-                        )}
+                        )} */}
 
                         <div className='space-y-2'>
                             <Label
@@ -97,12 +97,11 @@ export default function Form() {
                                 {...register("password")}
                             />
                         </div>
-                        {errors.password &&
-                            typeof errors.password === "object" && (
-                                <p className='text-red-500'>
-                                    {errors.password.message}
-                                </p>
-                            )}
+                        {/* {errors.password && (
+                            <p className='text-red-500'>
+                                {errors?.password?.message}
+                            </p>
+                        )} */}
 
                         {error && (
                             <p className='text-red-500 text-xs'>{error}</p>

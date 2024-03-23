@@ -53,14 +53,14 @@ interface User {
     password: string;
     role: string;
 }
-export default function EditDialog({ user }: { user: User }) {
+export default function EditDialog({ user }: { user: any }) {
     const { id, name, email, password, role } = user;
     const [state, formAction] = useFormState(editUser, { message: "" });
     const form = useForm<z.output<typeof editUserSchema>>({
         resolver: zodResolver(editUserSchema),
         defaultValues: {
             id: String(id),
-            name:name,
+            name: name,
             email: email,
             password: password,
             role: "user",

@@ -45,7 +45,7 @@ interface User {
     password: string;
     role: string;
 }
-export default function EditDialog({ user }: { user: User }) {
+export default function EditDialog({ user }: { user: any }) {
     const { id, name, email, password, role } = user;
     const [state, formAction] = useFormState(editUser, { message: "" });
     const form = useForm<z.output<typeof editUserSchema>>({

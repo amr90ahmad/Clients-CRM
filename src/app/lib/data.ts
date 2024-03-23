@@ -7,7 +7,7 @@ const items_per_page = 8;
 export async function fetchUsers(query: string, currentPage: number) {
     noStore();
     const session = await getServerSession();
-    const user = await getUserByEmail(session.user.email);
+    const user = await getUserByEmail(session?.user?.email);
     if (user.role != "admin") return;
 
     try {
@@ -125,8 +125,8 @@ export async function fetchTransactions(
     try {
         const result = await sql`SELECT * FROM transactions
                             WHERE client_id = ${client_id}
-        LIMIT ${items_per_page}
-        OFFSET ${(currentPage - 1) * items_per_page}`;
+                            LIMIT ${items_per_page}
+                            OFFSET ${(currentPage - 1) * items_per_page}`;
 
         return result.rows;
     } catch (error) {
@@ -134,6 +134,7 @@ export async function fetchTransactions(
         return [];
     }
 }
+
 export async function fetchTransactionsPages(id: number) {
     noStore();
     const session = await getServerSession();
