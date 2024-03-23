@@ -5,6 +5,7 @@ import Google from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 
 const handler = NextAuth({
+    secret: process.env.NEXTAUTH_SECRET,
     session: {
         strategy: "jwt",
     },
@@ -29,7 +30,7 @@ const handler = NextAuth({
                     user.password
                 );
 
-                if (!credentials.password) {
+                if (!correctPassword) {
                     return null;
                 }
 

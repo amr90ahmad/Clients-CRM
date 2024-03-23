@@ -1,8 +1,7 @@
-TODO:
-    - Check typescript.
-    - Deploy.
-
 FIX:
+    - env for production
+    - nextauth secret
+    - typescript
     - forms issues
         - user edit form (role, password)
         - use-hook-form coercion to string
