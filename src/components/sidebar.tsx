@@ -36,7 +36,7 @@ export default function Sidebar() {
                 </svg>
                 <span className='hidden lg:block'>Dashboard</span>
             </Link>
-            {data?.data?.user.role === "admin" && (
+            {data?.data?.user?.role === "admin" && (
                 <Link
                     href='/dashboard/users'
                     className={`text-neutral-400 hover:text-primary-1 cursor-pointer flex gap-2 text-sm font-medium items-center ${
