@@ -38,7 +38,7 @@ interface Client {
     email: string | null;
     created_at: Date;
 }
-export default function EditClientForm({ client }: { client: Client }) {
+export default function EditClientForm({ client }: { client: any }) {
     const { id, user_id, name, phone, address } = client;
     const [state, formAction] = useFormState(editClient, { message: "" });
     const form = useForm<z.output<typeof editClientSchema>>({
