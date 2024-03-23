@@ -8,18 +8,26 @@ import {
     clientSchema,
     editClientSchema,
     editUserSchema,
+    serviceSchema,
     userSchema,
 } from "./schemas";
 import { hash } from "bcrypt";
-import { redirect } from "next/navigation";
+import { getUserByEmail } from "@/app/lib/data";
 
 export type FormState = {
     message: string;
 };
+
 export async function createUser(
     prevState: FormState,
     data: FormData
 ): Promise<FormState> {
+    const session = await getServerSession();
+    if (!session) return { message: "Unauthenticated" };
+
+    const user = await getUserByEmail(session?.user?.email);
+    if (user.role != "admin") return { message: "Unauthenticated" };
+
     const formData = Object.fromEntries(data);
     const parsed = userSchema.safeParse(formData);
 
@@ -32,18 +40,28 @@ export async function createUser(
             message: "Invalid form data",
         };
     }
-    const { email, password, role } = parsed.data;
+
+    const { name, email, password, role } = parsed.data;
 
     try {
         const users = await sql`SELECT * from users`;
+
         const repeatedEmail = users.rows.find((user) => user.email == email);
+        const repeatedName = users.rows.find((user) => user.name == name);
+
         if (repeatedEmail) {
             return { message: "Email is already exists" };
         }
+        if (repeatedName) {
+            return { message: "Name is already exists" };
+        }
 
         const hashedPassword = await hash(password, 10);
-        await sql`INSERT INTO users (email, password, role)
-            VALUES (${email}, ${hashedPassword}, ${role})`;
+
+        await sql`INSERT INTO users (name, email, password, role)
+            VALUES (${name}, ${email}, ${hashedPassword}, ${role})`;
+
+        revalidatePath("/dashboard/users");
         return { message: "User created successfully" };
     } catch (e) {
         console.error(e);
@@ -55,6 +73,9 @@ export async function editUser(
     prevState: FormState,
     data: FormData
 ): Promise<FormState> {
+    const session = await getServerSession();
+    if (!session) return { message: "Unauthenticated" };
+
     const formData = Object.fromEntries(data);
     const parsed = editUserSchema.safeParse(formData);
 
@@ -62,11 +83,16 @@ export async function editUser(
         console.log(parsed.error.message);
         return { message: "Invalid form data" };
     }
-    const { email, password, role, id } = parsed.data;
-    const hashedPassword = await hash(password, 10);
+
+    const user = await getUserByEmail(session?.user?.email);
+    const { name, email, password, role, id } = parsed.data;
+
+    if (user.id != id && user.role !== "admin")
+        return { message: "Unauthenticated" };
 
     try {
-        await sql`UPDATE users SET email = ${email}, password = ${hashedPassword}, role = ${role} WHERE id = ${id}`;
+        await sql`UPDATE users SET email = ${email}, name = ${name}, role = ${role} WHERE id = ${id}`;
+
         revalidatePath("/dashboard/users");
         return { message: "User Information updated successfully" };
     } catch (e) {
@@ -75,16 +101,15 @@ export async function editUser(
     }
 }
 
-// export async function updateUser() {
-//     const session = await getServerSession();
-//     if (!session.user.role === "admin") {
-//         return { status: 401, message: "Not Authorized" };
-//     }
-//     //TODO
-// }
-
 export async function deleteUser(user_id: number) {
+    const session = await getServerSession();
+    if (!session) return { message: "Unauthenticated" };
+
+    const user = await getUserByEmail(session?.user?.email);
+    if (user.role != "admin") return { message: "Unauthenticated" };
+
     await sql`DELETE FROM users where id = ${user_id}`;
+
     revalidatePath("/dashboard/users");
 }
 
@@ -92,16 +117,23 @@ export async function createClient(
     prevState: FormState,
     data: FormData
 ): Promise<FormState> {
+    const session = await getServerSession();
+    if (!session) return { message: "Unauthenticated" };
+
     const formData = Object.fromEntries(data);
     const parsed = clientSchema.safeParse(formData);
 
     if (!parsed.success) {
         return { message: "Invalid form data" };
     }
+
+    const user = await getUserByEmail(session?.user?.email);
     const { name, phone, address } = parsed.data;
     try {
-        await sql`INSERT INTO clients (name, phone, address)
-            VALUES (${name}, ${phone}, ${address})`;
+        await sql`INSERT INTO clients (name, phone, address, user_id)
+            VALUES (${name}, ${phone}, ${address}, ${user?.id})`;
+
+        revalidatePath("/dashboards/clients");
         return { message: "Client created successfully" };
     } catch (e) {
         console.error(e);
@@ -113,6 +145,9 @@ export async function editClient(
     prevState: FormState,
     data: FormData
 ): Promise<FormState> {
+    const session = await getServerSession();
+    if (!session) return { message: "Unauthenticated" };
+
     const formData = Object.fromEntries(data);
     const parsed = editClientSchema.safeParse(formData);
 
@@ -120,9 +155,14 @@ export async function editClient(
         console.log(parsed.error.message);
         return { message: "Invalid form data" };
     }
+
     const { name, phone, address, id } = parsed.data;
+
     try {
-        await sql`UPDATE clients SET name = ${name}, phone = ${phone}, address = ${address} WHERE id = ${id}`;
+        await sql`UPDATE clients SET
+        name = ${name}, phone = ${phone}, address = ${address}
+        WHERE id = ${id}`;
+
         revalidatePath("/dashboard/users");
         return { message: "Client Information updated successfully" };
     } catch (e) {
@@ -131,16 +171,16 @@ export async function editClient(
     }
 }
 
-// export async function updateClient() {
-//     const session = await getServerSession();
-//     if (!session.user.role === "user") {
-//         return { status: 401, message: "Not Authorized" };
-//     }
-//     //TODO
-// }
+export async function deleteClient(client_id: number, user_id: number) {
+    const session = await getServerSession();
+    if (!session) return { message: "Unauthenticated" };
 
-export async function deleteClient(client_id: number) {
-    await sql`DELETE FROM clients where id = ${client_id}`;
+    const user = await getUserByEmail(session?.user?.email);
+
+    if (user.id !== user_id && user.role !== "admin")
+        return { message: "Unauthenticated" };
+
+    await sql`DELETE FROM clients WHERE id = ${client_id}`;
     revalidatePath("/dashboard/clients");
 }
 
@@ -148,6 +188,9 @@ export async function createTransaction(
     prevState: FormState,
     data: FormData
 ): Promise<FormState> {
+    const session = await getServerSession();
+    if (!session) return { message: "Unauthenticated" };
+
     const formData = Object.fromEntries(data);
     const parsed = TransactionSchema.safeParse(formData);
 
@@ -155,13 +198,15 @@ export async function createTransaction(
         console.log(data);
         return { message: parsed.error.message };
     }
+
     const { service, cost, payment, date, comment, client_id } = parsed?.data;
     const balance = Number(cost) - Number(payment);
+
     try {
         await sql`INSERT INTO transactions (service, cost, payment, balance, date, comment, client_id)
             VALUES (${service}, ${cost}, ${payment}, ${balance}, ${date.toLocaleString()},${comment}, ${client_id})`;
-            revalidatePath(`/dashbboard/client/${client_id}`);
-            // redirect(`/dashbboard/client/${client_id}`);
+
+        revalidatePath(`/dashbboard/client/${client_id}`);
         return { message: "Transaction created successfully" };
     } catch (e) {
         console.error(e);
@@ -169,42 +214,58 @@ export async function createTransaction(
     }
 }
 
-// export async function updateTransaction() {
-//     const session = await getServerSession();
-//     if (!session.user.role === "user") {
-//         return { status: 401, message: "Not Authorized" };
-//     }
-//     //TODO
-// }
-
 export async function deleteTransaction(transaction_id: number) {
+    const session = await getServerSession();
+    if (!session) return { message: "Unauthenticated" };
+
     await sql`DELETE FROM transactions where id = ${transaction_id}`;
     revalidatePath("/dashboard/transactions");
 }
 
-// export async function addService(service) {
-//     const session = await getServerSession();
-//     if (!session.user.role === "user") {
-//         return { status: 401, message: "Not Authorized" };
-//     }
-//     const user_id = session.user.id;
-//     // check repeated name
-//     try {
-//         await sql`INSERT INTO services (name, user_id)
-//             VALUES (${service}, ${user_id})`;
-//     } catch {
-//         return { status: 500, message: "Failed to insert data." };
-//     }
-// }
+export async function addService(
+    prevState: FormState,
+    data: FormData
+): Promise<FormState> {
+    console.log("here");
+    const session = await getServerSession();
+    if (!session) return { message: "Unauthenticated" };
 
-// export async function deleteService(service_id) {
-//     const session = await getServerSession();
-//     if (!session.user.role === "user") {
-//         return { status: 401, message: "Not Authorized" };
-//     }
-//     try {
-//         await sql`DELETE FROM services where id = ${service_id}`;
-//     } catch {
-//         return { status: 500, message: "Failed to delete data." };
-//     }
-// }
+    const formData = Object.fromEntries(data);
+    const parsed = serviceSchema.safeParse(formData);
+
+    if (!parsed.success) {
+        console.log(data);
+        return { message: parsed.error.message };
+    }
+
+    const services = await sql`SELECT * FROM services`;
+
+    const { label } = parsed?.data;
+
+    const repeatedService = services.rows.find((s) => s.name === label);
+
+    if (repeatedService)
+        return { message: "This service has been added before" };
+
+    const user = await getUserByEmail(session?.user?.email);
+
+    try {
+        await sql`INSERT INTO services (name, user_id)
+            VALUES (${label}, ${user.id})`;
+
+        revalidatePath("/dashboard/profile/services");
+        return { message: "Service added successfully" };
+    } catch (e) {
+        console.error(e);
+        return { message: "Database Error" };
+    }
+}
+
+export async function deleteService(id: number) {
+    const session = await getServerSession();
+    if (!session) return { message: "Unauthenticated" };
+
+    await sql`DELETE FROM services where id = ${id}`;
+
+    revalidatePath("/dashboard/profile/services");
+}

@@ -31,7 +31,7 @@
         "src/app/lib/data.ts",
         "src/app/lib/actions.ts",
         "src/app/lib/schemas.ts",
-        "src/app/api/auth/[...nextauth]/route.js"
+        "src/app/api/auth/[...nextauth]/route.ts"
     ],
     "exclude": ["node_modules"]
 }

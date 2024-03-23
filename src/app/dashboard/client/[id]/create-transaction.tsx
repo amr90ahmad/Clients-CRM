@@ -16,14 +16,22 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import {
+    Command,
+    CommandList,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+} from "@/components/ui/command";
+import {
     Select,
     SelectContent,
-    SelectGroup,
     SelectItem,
-    SelectLabel,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Check, ChevronsUpDown } from "lucide-react";
+
 import {
     Form,
     FormControl,
@@ -46,6 +54,18 @@ import { Calendar } from "@/components/ui/calendar";
 import { TransactionSchema } from "@/app/lib/schemas";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
+import ServiceForm from "../../profile/services/add-service";
+const services = [
+    { label: "English", value: "en" },
+    { label: "French", value: "fr" },
+    { label: "German", value: "de" },
+    { label: "Spanish", value: "es" },
+    { label: "Portuguese", value: "pt" },
+    { label: "Russian", value: "ru" },
+    { label: "Japanese", value: "ja" },
+    { label: "Korean", value: "ko" },
+    { label: "Chinese", value: "zh" },
+] as const;
 
 export default function TransactionForm({
     id,
@@ -74,7 +94,9 @@ export default function TransactionForm({
         <Dialog>
             <DialogTrigger asChild>
                 {trigger === "button" ? (
-                    <Button className='bg-primary-1'>Add Transaction</Button>
+                    <Button className='bg-primary-1 text-neutral-100'>
+                        Add Transaction
+                    </Button>
                 ) : (
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
@@ -126,18 +148,18 @@ export default function TransactionForm({
                                     >
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder='Select Service' />
+                                                <SelectValue placeholder='Select a verified email to display' />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value='Service1'>
-                                                Service1
+                                            <SelectItem value='m@example.com'>
+                                                m@example.com
                                             </SelectItem>
-                                            <SelectItem value='Service2'>
-                                                Service2
+                                            <SelectItem value='m@google.com'>
+                                                m@google.com
                                             </SelectItem>
-                                            <SelectItem value='Service3'>
-                                                Service3
+                                            <SelectItem value='m@support.com'>
+                                                m@support.com
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>
@@ -177,59 +199,7 @@ export default function TransactionForm({
                                 </FormItem>
                             )}
                         />
-                        {/* <FormField
-                            control={form.control}
-                            name='date'
-                            render={({ field }) => (
-                                <FormItem className='flex flex-col'>
-                                    <FormLabel>Date</FormLabel>
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <FormControl>
-                                                <Button
-                                                    variant={"outline"}
-                                                    className={cn(
-                                                        "w-[240px] pl-3 text-left font-normal",
-                                                        !field.value &&
-                                                            "text-muted-foreground"
-                                                    )}
-                                                >
-                                                    {field.value ? (
-                                                        format(
-                                                            field.value,
-                                                            "PPP"
-                                                        )
-                                                    ) : (
-                                                        <span>Pick a date</span>
-                                                    )}
-                                                    <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
-                                                </Button>
-                                            </FormControl>
-                                        </PopoverTrigger>
-                                        <PopoverContent
-                                            className='w-auto p-0'
-                                            align='start'
-                                        >
-                                            <Calendar
-                                                mode='single'
-                                                selected={field.value}
-                                                onSelect={field.onChange}
-                                                {...field}
-                                                disabled={(date) =>
-                                                    date > new Date() ||
-                                                    date <
-                                                        new Date("1900-01-01")
-                                                }
-                                                initialFocus
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
-
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        /> */}
-                        <input type='date' name='date' defaultValue={id} />
+                        <Input type='date' name='date' />
                         <FormField
                             control={form.control}
                             name='comment'

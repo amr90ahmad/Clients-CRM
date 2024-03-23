@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { sql } from "@vercel/postgres";
+import Google from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 
 const handler = NextAuth({
@@ -28,7 +29,7 @@ const handler = NextAuth({
                     user.password
                 );
 
-                if (!correctPassword) {
+                if (!credentials.password) {
                     return null;
                 }
 

@@ -19,6 +19,7 @@ import {
 import { fetchUsers } from "@/app/lib/data";
 import DeleteDialog from "./delete";
 import EditDialog from "./edit";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default async function UsersTable({
     query,
@@ -29,12 +30,12 @@ export default async function UsersTable({
 }) {
     const users = await fetchUsers(query, currentPage);
     return (
-        <>
+        <ScrollArea className='h-[70vh]'>
             <Table className='dark min-h-[70%]'>
                 <TableHeader>
                     <TableRow>
+                        <TableHead>Name</TableHead>
                         <TableHead>Email</TableHead>
-                        <TableHead>Password</TableHead>
                         <TableHead>Role</TableHead>
                         <TableHead className='text-center'>Action</TableHead>
                     </TableRow>
@@ -42,16 +43,16 @@ export default async function UsersTable({
                 <TableBody className='text-neutral-400'>
                     {users?.map((user) => (
                         <TableRow key={user.email}>
+                            <TableCell>{user.name}</TableCell>
                             <TableCell className='font-medium'>
                                 {user.email}
                             </TableCell>
-                            <TableCell>{user.password}</TableCell>
                             <TableCell>{user.role}</TableCell>
                             <TableCell className='text-center flex gap-4 justify-center'>
                                 <TooltipProvider>
                                     <Tooltip>
                                         <TooltipTrigger>
-                                            <EditDialog user={user} />
+                                            <EditDialog user={{ ...user }} />
                                         </TooltipTrigger>
                                         <TooltipContent>
                                             Edit user
@@ -74,6 +75,6 @@ export default async function UsersTable({
                     ))}
                 </TableBody>
             </Table>
-        </>
+        </ScrollArea>
     );
 }

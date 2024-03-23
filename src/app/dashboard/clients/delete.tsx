@@ -13,7 +13,13 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-export default function DeleteDialog({ id }: { id: number }) {
+export default function DeleteDialog({
+    client_id,
+    user_id,
+}: {
+    client_id: number;
+    user_id: number;
+}) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -44,7 +50,7 @@ export default function DeleteDialog({ id }: { id: number }) {
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <Button
                         variant='destructive'
-                        onClick={() => deleteClient(id)}
+                        onClick={() => deleteClient(client_id, user_id)}
                     >
                         Delete
                     </Button>

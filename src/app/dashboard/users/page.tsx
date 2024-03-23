@@ -4,10 +4,11 @@ import UsersTable from "./table";
 import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { fetchUsersPages } from "@/app/lib/data";
+import { fetchUsersPages, getUserByEmail } from "@/app/lib/data";
 import Paginate from "@/components/pagination";
 import UserForm from "./create";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export default async function page({
     searchParams,
@@ -17,33 +18,22 @@ export default async function page({
         page?: string;
     };
 }) {
+    const session = await getServerSession();
+    if (!session) redirect("/login");
+    const user = await getUserByEmail(session.user?.email);
+    if (user.role != "admin") redirect("/dashboard");
     const query = searchParams?.query || "";
     const currentPage = Number(searchParams?.page) || 1;
     const totalPages = await fetchUsersPages(query);
-    const session = await getSession();
-    console.log(session);
     return (
         <>
-            <header className='flex justify-between mb-8 mt-4 flex-wrap gap-2'>
-                <div className='flex gap-8'>
-                    <h2 className='text-2xl text-neutral-100 font-medium'>
+            <header className='flex justify-between mb-8 mt-4 flex-wrap gap-8'>
+                <div className='flex flex-wrap gap-8'>
+                    <h2 className='text-xl text-neutral-100 font-medium'>
                         Users
                     </h2>
                     <Search />
                 </div>
-                {/* <Button variant='link' className='dark '>
-                    <Link href='/dashboard/adduser' className='flex gap-2'>
-                        <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            viewBox='0 0 20 20'
-                            fill='currentColor'
-                            className='w-5 h-5'
-                        >
-                            <path d='M10 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM1.615 16.428a1.224 1.224 0 0 1-.569-1.175 6.002 6.002 0 0 1 11.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 0 1 7 18a9.953 9.953 0 0 1-5.385-1.572ZM16.25 5.75a.75.75 0 0 0-1.5 0v2h-2a.75.75 0 0 0 0 1.5h2v2a.75.75 0 0 0 1.5 0v-2h2a.75.75 0 0 0 0-1.5h-2v-2Z' />
-                        </svg>
-                        Add User
-                    </Link>
-                </Button> */}
                 <UserForm />
             </header>
             <Suspense fallback='Loading...'>

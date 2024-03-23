@@ -43,6 +43,7 @@ export default function UserForm() {
     const form = useForm<z.output<typeof userSchema>>({
         resolver: zodResolver(userSchema),
         defaultValues: {
+            name: "",
             email: "",
             password: "",
             role: "user",
@@ -53,7 +54,9 @@ export default function UserForm() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className='bg-primary-1'>Add User</Button>
+                <Button className='bg-primary-1 hover:bg-primary-2'>
+                    Add User
+                </Button>
             </DialogTrigger>
             <DialogContent className='sm:max-w-[425px] dark text-neutral-400'>
                 <DialogHeader>
@@ -72,6 +75,20 @@ export default function UserForm() {
                         action={formAction}
                         className='space-y-8'
                     >
+                        <FormField
+                            control={form.control}
+                            name='name'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Name</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder='Name' {...field} />
+                                    </FormControl>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                             control={form.control}
                             name='email'

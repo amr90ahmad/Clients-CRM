@@ -19,6 +19,7 @@ import {
 import { fetchTransactions, fetchTransactionsPages } from "@/app/lib/data";
 import DeleteDialog from "./delete-transaction";
 import Paginate from "@/components/pagination";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default async function TransactionsTable({
     id,
@@ -27,10 +28,9 @@ export default async function TransactionsTable({
     id: number;
     currentPage: number;
 }) {
-    
     const transactions = await fetchTransactions(id, currentPage);
     return (
-        <>
+        <ScrollArea className='h-[70vh]'>
             <Table className='dark min-h-[70%]'>
                 <TableHeader>
                     <TableRow>
@@ -69,6 +69,6 @@ export default async function TransactionsTable({
                     ))}
                 </TableBody>
             </Table>
-        </>
+        </ScrollArea>
     );
 }

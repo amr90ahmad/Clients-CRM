@@ -6,6 +6,10 @@ const items_per_page = 8;
 
 export async function fetchUsers(query: string, currentPage: number) {
     noStore();
+    const session = await getServerSession();
+    const user = await getUserByEmail(session.user.email);
+    if (user.role != "admin") return;
+
     try {
         const result = await sql`SELECT * FROM users 
         WHERE
@@ -14,6 +18,7 @@ export async function fetchUsers(query: string, currentPage: number) {
         ORDER BY id DESC
         LIMIT ${items_per_page}
         OFFSET ${(currentPage - 1) * items_per_page}`;
+
         return result.rows;
     } catch (error) {
         console.error("Database Error:", error);
@@ -23,6 +28,10 @@ export async function fetchUsers(query: string, currentPage: number) {
 
 export async function fetchUsersPages(query: string) {
     noStore();
+    const session = await getServerSession();
+    const user = await getUserByEmail(session?.user?.email);
+    if (user.role != "admin") return 0;
+
     try {
         const count = await sql`SELECT COUNT(*) FROM users
         WHERE
@@ -33,42 +42,50 @@ export async function fetchUsersPages(query: string) {
         const totalPages = Math.ceil(
             Number(count.rows[0].count) / items_per_page
         );
+
         return totalPages;
     } catch (error) {
         console.error("Database Error:", error);
-        throw new Error("Failed to fetch users pages.");
+        return 0;
     }
 }
 
-// TODO
-// Sort (created_at, latest_transaction_date, alpha, balance)
 export async function fetchClients(query: string, currentPage: number) {
     noStore();
+    const session = await getServerSession();
+    if (!session) return [];
+    const user = await getUserByEmail(session?.user?.email);
+
     try {
         const result = await sql`SELECT * FROM clients 
         WHERE
-        name ILIKE ${`%${query}%`} OR
+        (name ILIKE ${`%${query}%`} OR
         phone ILIKE ${`%${query}%`} OR
-        address ILIKE ${`%${query}%`}
+        address ILIKE ${`%${query}%`})
+        AND user_id = ${user.id}
         ORDER BY id DESC
         LIMIT ${items_per_page}
         OFFSET ${(currentPage - 1) * items_per_page}`;
+
         return result.rows;
     } catch (error) {
         console.error("Database Error:", error);
-        throw new Error("Failed to fetch clients.");
+        return [];
     }
 }
 
 export async function fetchClientsPages(query: string) {
     noStore();
+    const session = await getServerSession();
+    if (!session) return 0;
+    const user = await getUserByEmail(session?.user?.email);
     try {
         const count = await sql`SELECT COUNT(*) FROM clients
         WHERE
         name ILIKE ${`%${query}%`} OR
         phone ILIKE ${`%${query}%`} OR
         address ILIKE ${`%${query}%`}
-        `;
+        AND user_id = ${user.id}`;
 
         const totalPages = Math.ceil(
             Number(count.rows[0].count) / items_per_page
@@ -76,15 +93,20 @@ export async function fetchClientsPages(query: string) {
         return totalPages;
     } catch (error) {
         console.error("Database Error:", error);
-        throw new Error("Failed to fetch clients pages.");
+        return 0;
     }
 }
 
 export async function getClientById(id: number) {
     noStore();
+    const session = await getServerSession();
+    if (!session) return { message: "Unauthenticated" };
+    const user = await getUserByEmail(session?.user?.email);
+
     try {
         const result =
-            await sql`SELECT * FROM clients where id = ${id} LIMIT 1`;
+            await sql`SELECT * FROM clients WHERE id = ${id} AND user_id = ${user.id} LIMIT 1`;
+
         return result.rows[0];
     } catch (error) {
         console.error("Database Error:", error);
@@ -92,18 +114,14 @@ export async function getClientById(id: number) {
     }
 }
 
-// TODO
-// Sort (date)
 export async function fetchTransactions(
     client_id: number,
     currentPage: number
 ) {
     noStore();
+    const session = await getServerSession();
+    if (!session) return [];
 
-    // const session = await getServerSession();
-    // if (!session.user.role === "user") {
-    //     return { status: 401, message: "Not Authorized" };
-    // }
     try {
         const result = await sql`SELECT * FROM transactions
                             WHERE client_id = ${client_id}
@@ -113,11 +131,13 @@ export async function fetchTransactions(
         return result.rows;
     } catch (error) {
         console.error("Database Error:", error);
-        throw new Error("Failed to fetch transactions.");
+        return [];
     }
 }
 export async function fetchTransactionsPages(id: number) {
     noStore();
+    const session = await getServerSession();
+    if (!session) return 0;
     try {
         const count = await sql`SELECT COUNT(*) FROM transactions
         WHERE client_id = ${id}`;
@@ -128,26 +148,34 @@ export async function fetchTransactionsPages(id: number) {
         return totalPages;
     } catch (error) {
         console.error("Database Error:", error);
+        return 0;
+    }
+}
+
+export async function getUserByEmail(email: string | null | undefined) {
+    try {
+        const result = await sql`SELECT * FROM users
+        WHERE email = ${email}`;
+
+        return result.rows[0];
+    } catch (error) {
+        console.error("Database Error:", error);
         throw new Error("Failed to fetch clients pages.");
     }
 }
 
-// TODO
-// Sort (alpha)
-// export async function fetchServices(client_id, page = 1) {
-//     noStore();
+export async function fetchServices() {
+    const session = await getServerSession();
+    if (!session) return [];
 
-//     const session = await getServerSession();
-//     if (!session.user.role === "user") {
-//         return { status: 401, message: "Not Authorized" };
-//     }
-//     try {
-//         const result = await sql`SELECT * FROM services
-//                             WHERE client_id = ${client_id}
-//                             LIMIT ${items}
-//                             OFFSET ${(page - 1) * items}`;
-//         return { status: 200, data: result.rows };
-//     } catch {
-//         return { status: 500, message: "Failed to fetch data." };
-//     }
-// }
+    const user = await getUserByEmail(session?.user?.email);
+
+    try {
+        const result =
+            await sql`SELECT * FROM services where user_id = ${user.id}`;
+        return result.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        return [];
+    }
+}
