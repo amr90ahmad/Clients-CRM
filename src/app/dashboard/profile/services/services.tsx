@@ -25,7 +25,7 @@ export default async function ServicesMenu() {
             <DropdownMenuTrigger asChild>
                 <Button variant='outline'>Services</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className='dark'>
+            <DropdownMenuContent className=''>
                 <DropdownMenuLabel>Services</DropdownMenuLabel>
                 <ScrollArea className='h-72'>
                     {services?.map((s) => (

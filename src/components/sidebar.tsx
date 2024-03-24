@@ -5,21 +5,21 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 
+const linkStyle = `cursor-pointer flex gap-2 text-sm font-medium hover:text-primary items-center px-8 py-4`;
+
 export default function Sidebar() {
     const active = usePathname();
     const data = useSession();
     return (
         <>
-            <div className='flex gap-2 font-semibold mb-16'>
+            <div className='flex gap-2 font-semibold my-8 mx-auto'>
                 <Image width={25} height={20} src='/logo.png' alt='logo' />{" "}
-                <h3 className='text-neutral-100 font-bold hidden lg:block'>
-                    Clients Management
-                </h3>
+                <h3 className='font-bold hidden md:block'>DashboardX</h3>
             </div>
             <Link
                 href='/dashboard'
-                className={`text-neutral-400 hover:text-primary-1 cursor-pointer flex gap-2 text-sm font-medium items-center ${
-                    active === "/dashboard" ? "text-primary-1" : ""
+                className={` ${linkStyle} ${
+                    active === "/dashboard" ? "text-primary" : ""
                 }`}
             >
                 <svg
@@ -34,13 +34,13 @@ export default function Sidebar() {
                         clipRule='evenodd'
                     />
                 </svg>
-                <span className='hidden lg:block'>Dashboard</span>
+                <span className='hidden md:block'>Dashboard</span>
             </Link>
             {/* {data?.data?.user?.role === "admin" && ( */}
             <Link
                 href='/dashboard/users'
-                className={`text-neutral-400 hover:text-primary-1 cursor-pointer flex gap-2 text-sm font-medium items-center ${
-                    active === "/dashboard/users" ? "text-primary-1" : ""
+                className={`${linkStyle} ${
+                    active === "/dashboard/users" ? "text-primary" : ""
                 }`}
             >
                 <svg
@@ -51,13 +51,13 @@ export default function Sidebar() {
                 >
                     <path d='M7 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM14.5 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM1.615 16.428a1.224 1.224 0 0 1-.569-1.175 6.002 6.002 0 0 1 11.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 0 1 7 18a9.953 9.953 0 0 1-5.385-1.572ZM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 0 0-1.588-3.755 4.502 4.502 0 0 1 5.874 2.636.818.818 0 0 1-.36.98A7.465 7.465 0 0 1 14.5 16Z' />
                 </svg>
-                <span className='hidden lg:block'>Users</span>
+                <span className='hidden md:block'>Users</span>
             </Link>
             {/* )} */}
             <Link
                 href='/dashboard/clients'
-                className={`text-neutral-400 hover:text-primary-1 cursor-pointer flex gap-2 text-sm font-medium items-center ${
-                    active === "/dashboard/clients" ? "text-primary-1" : ""
+                className={`${linkStyle} ${
+                    active === "/dashboard/clients" ? "text-primary" : ""
                 }`}
             >
                 <svg
@@ -77,13 +77,13 @@ export default function Sidebar() {
                         clipRule='evenodd'
                     />
                 </svg>
-                <span className='hidden lg:block'>Clients</span>
+                <span className='hidden md:block'>Clients</span>
             </Link>
             <Link
                 href='/dashboard/profile'
-                className={`text-neutral-400 hover:text-primary-1 cursor-pointer flex gap-2 text-sm font-medium items-center ${
+                className={`${linkStyle} ${
                     active.startsWith("/dashboard/profile")
-                        ? "text-primary-1"
+                        ? "text-primary"
                         : ""
                 }`}
             >
@@ -96,7 +96,7 @@ export default function Sidebar() {
                     <path d='M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z' />
                 </svg>
 
-                <span className='hidden lg:block'>Profile</span>
+                <span className='hidden md:block'>Profile</span>
             </Link>
         </>
     );

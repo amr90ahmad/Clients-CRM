@@ -46,7 +46,7 @@ export default function Form() {
 
     return (
         <>
-            <Card className='max-w-md mx-auto dark '>
+            <Card className='max-w-md mx-auto '>
                 <CardHeader>
                     <CardTitle className='text-3xl font-bold text-center'>
                         Welcome!

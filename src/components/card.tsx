@@ -1,8 +1,17 @@
-export default function Card({ title = "Pageviews", count = "50.9K" }) {
+import {
+    Card,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+
+export default function CardComponent({ title = "Pageviews", info = "50.9K" }) {
     return (
-        <div className='rounded-lg bg-primary-2 border-border-clr border-2 p-4'>
-            <p className='text-neutral-400 text-sm mb-4 '>{title}</p>
-            <span className='text-neutral-100 text-2xl font-bold'>{count}</span>
-        </div>
+        <Card>
+            <CardHeader>
+                <CardDescription>{title}</CardDescription>
+                <CardTitle>{info}</CardTitle>
+            </CardHeader>
+        </Card>
     );
 }

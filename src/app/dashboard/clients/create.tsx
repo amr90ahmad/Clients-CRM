@@ -44,9 +44,9 @@ export default function ClientForm() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className='bg-primary-1'>Add Client</Button>
+                <Button>Add Client</Button>
             </DialogTrigger>
-            <DialogContent className='sm:max-w-[425px] dark text-neutral-400'>
+            <DialogContent className='sm:max-w-[425px]'>
                 <DialogHeader>
                     <DialogTitle>Add Client</DialogTitle>
                 </DialogHeader>

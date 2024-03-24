@@ -30,7 +30,7 @@ export default function DeleteDialog({ id }: { id: number }) {
                     />
                 </svg>
             </AlertDialogTrigger>
-            <AlertDialogContent className='dark text-neutral-400'>
+            <AlertDialogContent className=''>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
                         Are you absolutely sure?

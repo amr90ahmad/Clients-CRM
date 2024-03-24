@@ -25,14 +25,12 @@ export default async function page({
 
     return (
         <>
-            <header className='flex justify-between mb-8 mt-4 flex-wrap gap-2'>
-                <div className='flex flex-wrap gap-8'>
-                    <h2 className='text-xl text-neutral-100 font-medium'>
-                        Clients
-                    </h2>
-                    <Search />
+            <header className='mb-8 mt-4'>
+                <div className='flex justify-between mb-2'>
+                    <h2 className='text-xl font-medium'>Clients</h2>
+                    <ClientForm />
                 </div>
-                <ClientForm />
+                <Search />
             </header>
             <Suspense fallback='Loading...'>
                 <ClientsTable query={query} currentPage={currentPage} />

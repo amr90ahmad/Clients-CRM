@@ -52,7 +52,7 @@ export default function EditClientForm({ client }: { client: Client }) {
     const formRef = useRef<HTMLFormElement>(null);
 
     return (
-        <Card className='dark text-neutral-400 bg-primary-2'>
+        <Card className=''>
             <CardHeader>
                 <CardTitle>Client Information</CardTitle>
                 <CardDescription>{state.message}</CardDescription>

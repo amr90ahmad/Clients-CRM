@@ -3,6 +3,14 @@
 import { Bar } from "react-chartjs-2";
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 
 Chart.register(CategoryScale);
 
@@ -28,27 +36,34 @@ export default function BarChart() {
         ],
     };
     return (
-        <div className='text-neutral-400 font-bold row-span-2 col-span-2'>
-            <h5 style={{ textAlign: "center" }}>BarChart</h5>
-            <Bar
-                data={chartData}
-                options={{
-                    scales: {
-                        x: {
-                            type: "category", // Specify x-axis scale type as 'category'
-                        },
-                    },
-                    plugins: {
-                        title: {
-                            display: false,
-                            text: "",
-                        },
-                        legend: {
-                            display: false,
-                        },
-                    },
-                }}
-            />
-        </div>
+        <>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Revenues</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Bar
+                        data={chartData}
+                        options={{
+                            scales: {
+                                x: {
+                                    type: "category", // Specify x-axis scale type as 'category'
+                                },
+                            },
+                            plugins: {
+                                title: {
+                                    display: false,
+                                    text: "",
+                                },
+                                legend: {
+                                    display: false,
+                                },
+                            },
+                        }}
+                    />
+                </CardContent>
+                <CardFooter></CardFooter>
+            </Card>
+        </>
     );
 }

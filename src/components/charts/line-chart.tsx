@@ -3,6 +3,14 @@
 import { Line } from "react-chartjs-2";
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 
 Chart.register(CategoryScale);
 
@@ -26,20 +34,27 @@ export default function LineChart() {
     };
     return (
         <>
-            <h5 className='text-neutral-400'>Revenues</h5>
-            <Line
-                data={chartData}
-                options={{
-                    plugins: {
-                        title: {
-                            display: false,
-                        },
-                        legend: {
-                            display: false,
-                        },
-                    },
-                }}
-            />
+            <Card>
+                <CardHeader>
+                    <CardTitle>Revenues</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Line
+                        data={chartData}
+                        options={{
+                            plugins: {
+                                title: {
+                                    display: false,
+                                },
+                                legend: {
+                                    display: false,
+                                },
+                            },
+                        }}
+                    />
+                </CardContent>
+                <CardFooter></CardFooter>
+            </Card>
         </>
     );
 }

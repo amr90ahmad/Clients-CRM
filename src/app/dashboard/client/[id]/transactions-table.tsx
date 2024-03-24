@@ -31,7 +31,7 @@ export default async function TransactionsTable({
     const transactions = await fetchTransactions(id, currentPage);
     return (
         <ScrollArea className='h-[70vh]'>
-            <Table className='dark min-h-[70%]'>
+            <Table className=' min-h-[70%]'>
                 <TableHeader>
                     <TableRow>
                         <TableHead>Date</TableHead>
@@ -42,7 +42,7 @@ export default async function TransactionsTable({
                         <TableHead className='text-center'>Action</TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody className='text-neutral-400'>
+                <TableBody className=''>
                     {transactions?.map((transaction) => (
                         <TableRow key={transaction.id}>
                             <TableCell className='font-medium'>

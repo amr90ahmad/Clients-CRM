@@ -31,7 +31,7 @@ export default function Paginate({ totalPages }: { totalPages: number }) {
 
     const pagesArray = Array.from({ length: totalPages }, (_, i) => i + 1);
     return (
-        <Pagination className='dark text-neutral-400 mt-8'>
+        <Pagination className='mt-8'>
             <PaginationContent>
                 <PaginationItem>
                     <PaginationPrevious

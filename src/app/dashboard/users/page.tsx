@@ -27,14 +27,12 @@ export default async function page({
     const totalPages = await fetchUsersPages(query);
     return (
         <>
-            <header className='flex justify-between mb-8 mt-4 flex-wrap gap-8'>
-                <div className='flex flex-wrap gap-8'>
-                    <h2 className='text-xl text-neutral-100 font-medium'>
-                        Users
-                    </h2>
-                    <Search />
+            <header className='mb-8 mt-4'>
+                <div className='flex justify-between mb-2'>
+                    <h2 className='text-xl font-medium'>Users</h2>
+                    <UserForm />
                 </div>
-                <UserForm />
+                <Search />
             </header>
             <Suspense fallback='Loading...'>
                 <UsersTable query={query} currentPage={currentPage} />

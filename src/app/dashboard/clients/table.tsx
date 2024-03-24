@@ -33,7 +33,7 @@ export default async function ClientsTable({
     const clients = await fetchClients(query, currentPage);
 
     return (
-        <Table className='dark overflow-auto max-h-[50vh]'>
+        <Table className='overflow-auto max-h-[50vh]'>
             <TableHeader>
                 <TableRow>
                     <TableHead>Name</TableHead>

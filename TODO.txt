@@ -1,20 +1,21 @@
 FIX:
-    - env for production
-    - nextauth secret
     - typescript
     - forms issues
         - user edit form (role, password)
         - use-hook-form coercion to string
+    - handle delete dependancies
+    - optimize margin and padding
 
 Features:
-    - cards & charts
-    - login status
+    - optimize charts, cards and tables ui from figma
+    - skeletons
+    - profile icon
     - export to excel
-    - handle change & forget password
-    - reports
-    - modes
     - i18n
+    - handle change & forget password
+
     - sending emails
+    - reports
     - lead management
     - calendar and todo
     - customization

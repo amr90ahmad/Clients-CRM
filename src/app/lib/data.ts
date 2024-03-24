@@ -180,3 +180,38 @@ export async function fetchServices() {
         return [];
     }
 }
+
+export async function getCardsInfo() {
+    noStore();
+
+    const session = await getServerSession();
+    if (!session) return;
+
+    try {
+        const numOfClientsPromise = sql`SELECT COUNT(*) FROM clients`;
+        const numOfUsersPromise = sql`SELECT COUNT(*) FROM users`;
+        const numOfTransactionsPromise = sql`SELECT COUNT(*) FROM transactions`;
+        const totalRevenuesPromise = sql`SELECT SUM(payment) FROM transactions`;
+
+        const data = await Promise.all([
+            numOfClientsPromise,
+            numOfUsersPromise,
+            numOfTransactionsPromise,
+            totalRevenuesPromise,
+        ]);
+
+        const numOfClients = Number(data[0].rows[0].count ?? "0");
+        const numOfUsers = Number(data[1].rows[0].count ?? "0");
+        const numOfTransactions = Number(data[2].rows[0].count ?? "0");
+        const totalRevenues = Number(data[3].rows[0].sum ?? "0");
+
+        return {
+            numOfClients,
+            numOfUsers,
+            numOfTransactions,
+            totalRevenues,
+        };
+    } catch (error) {
+        console.error("Database Error:", error);
+    }
+}

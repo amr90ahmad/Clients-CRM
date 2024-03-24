@@ -1,16 +1,41 @@
 import { ReactNode } from "react";
 import Sidebar from "../../components/sidebar";
 import Provider from "@/components/Provider";
+import ModeToggle from "@/components/mode-toggle";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getServerSession } from "next-auth";
+import Logout from "@/components/logout";
+import { getUserByEmail } from "@/app/lib/data";
 
-export default function layout({ children }: { children: ReactNode }) {
+export default async function layout({ children }: { children: ReactNode }) {
+    const session = await getServerSession();
+    const user = await getUserByEmail(session?.user?.email);
     return (
-        <main className='grid grid-cols-12'>
+        <main className='grid grid-cols-12 md:grid-cols-main'>
             <Provider>
-                <aside className='items-center lg:items-start col-span-2 flex flex-col gap-10 border-r-2 border-primary-2 pt-8 p-2 lg:p-6 shadow-lg min-h-[100vh] bg-neutral-800'>
+                <aside className='items-center col-span-2 md:col-span-1 md:items-start flex flex-col border-r-2 shadow-md min-h-[100vh]'>
                     <Sidebar />
                 </aside>
             </Provider>
-            <div className='p-4 col-span-10'>{children}</div>
+            <div className='p-4 col-span-10 md:col-span-1'>
+                <header className='flex justify-between items-center flex-wrap-reverse gap-4 mb-8'>
+                    <h4 className='my-4 font-semibold'>
+                        Welcome back, {user?.name || user?.email}
+                    </h4>
+                    <div className='flex gap-2 ml-auto'>
+                        <ModeToggle />
+                        {/* <Logout /> */}
+                        <Avatar>
+                            <AvatarImage
+                                src='https://github.com/shadcn.png'
+                                alt='@shadcn'
+                            />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                    </div>
+                </header>
+                {children}
+            </div>
         </main>
     );
 }

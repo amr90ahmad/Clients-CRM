@@ -20,7 +20,7 @@ export default function PieChart() {
     };
     return (
         <>
-            <h5 style={{ textAlign: "center" }}>Revenues</h5>
+            <h5 >Revenues</h5>
             <Pie
                 data={chartData}
                 options={{

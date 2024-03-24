@@ -91,6 +91,18 @@ export async function editUser(
         return { message: "Unauthenticated" };
 
     try {
+        const users = await sql`SELECT * from users`;
+
+        const repeatedEmail = users.rows.find((user) => user.email == email);
+        const repeatedName = users.rows.find((user) => user.name == name);
+
+        if (repeatedEmail) {
+            return { message: "Email is already exists" };
+        }
+        if (repeatedName) {
+            return { message: "Name is already exists" };
+        }
+
         await sql`UPDATE users SET email = ${email}, name = ${name}, role = ${role} WHERE id = ${id}`;
 
         revalidatePath("/dashboard/users");
@@ -130,6 +142,14 @@ export async function createClient(
     const user = await getUserByEmail(session?.user?.email);
     const { name, phone, address } = parsed.data;
     try {
+        const clients = await sql`SELECT * from clients`;
+
+        const repeatedName = clients.rows.find((client) => client.name == name);
+
+        if (repeatedName) {
+            return { message: "Name is already exists" };
+        }
+
         await sql`INSERT INTO clients (name, phone, address, user_id)
             VALUES (${name}, ${phone}, ${address}, ${user?.id})`;
 
@@ -159,6 +179,14 @@ export async function editClient(
     const { name, phone, address, id } = parsed.data;
 
     try {
+        const clients = await sql`SELECT * from clients`;
+
+        const repeatedName = clients.rows.find((client) => client.name == name);
+
+        if (repeatedName) {
+            return { message: "Name is already exists" };
+        }
+
         await sql`UPDATE clients SET
         name = ${name}, phone = ${phone}, address = ${address}
         WHERE id = ${id}`;
@@ -268,4 +296,11 @@ export async function deleteService(id: number) {
     await sql`DELETE FROM services where id = ${id}`;
 
     revalidatePath("/dashboard/profile/services");
+}
+
+export async function setLogoutStatus() {
+    const session = await getServerSession();
+    const user = await getUserByEmail(session?.user?.email);
+
+    await sql`UPDATE users SET status = false WHERE id = ${user.id}`;
 }

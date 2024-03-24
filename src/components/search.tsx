@@ -26,7 +26,7 @@ export default function Search() {
                 placeholder='Search for...'
                 onChange={(e) => handleSearch(e.target.value)}
                 defaultValue={searchParams.get("query")?.toString()}
-                className='bg-primary-2 text-neutral-400 border-border-clr rounded '
+                className='rounded'
             />
         </div>
     );

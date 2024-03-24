@@ -112,7 +112,7 @@ export default function TransactionForm({
                     </svg>
                 )}
             </DialogTrigger>
-            <DialogContent className='sm:max-w-[425px] dark text-neutral-400'>
+            <DialogContent className='sm:max-w-[425px] '>
                 <DialogHeader>
                     <DialogTitle>Add Transaction</DialogTitle>
                 </DialogHeader>

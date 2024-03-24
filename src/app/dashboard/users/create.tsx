@@ -54,11 +54,11 @@ export default function UserForm() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className='bg-primary-1 hover:bg-primary-2'>
+                <Button className=''>
                     Add User
                 </Button>
             </DialogTrigger>
-            <DialogContent className='sm:max-w-[425px] dark text-neutral-400'>
+            <DialogContent className='sm:max-w-[425px]'>
                 <DialogHeader>
                     <DialogTitle>Add User</DialogTitle>
                 </DialogHeader>

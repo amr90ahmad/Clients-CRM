@@ -13,7 +13,7 @@ import ServicesMenu from './services'
 export default async function Services() {
 
     return (
-        <Card className='dark text-neutral-400 bg-primary-2 '>
+        <Card className=''>
             <CardHeader>
                 <CardTitle>Services</CardTitle>
             </CardHeader>

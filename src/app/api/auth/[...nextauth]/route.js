@@ -34,6 +34,8 @@ const handler = NextAuth({
                     return null;
                 }
 
+                await sql`UPDATE users set status = true WHERE email = ${credentials.email}`;
+
                 return user;
             },
         }),
