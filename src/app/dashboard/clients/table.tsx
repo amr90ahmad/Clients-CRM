@@ -42,7 +42,7 @@ export default async function ClientsTable({
                     <TableHead className='text-center'>Action</TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody className='text-neutral-400'>
+            <TableBody>
                 {clients?.map((client) => (
                     <TableRow key={client.id}>
                         <TableCell className='font-medium'>
@@ -70,7 +70,7 @@ export default async function ClientsTable({
                                 <Tooltip>
                                     <TooltipTrigger>
                                         {" "}
-                                        <EditDialog client={{ ...client }} />   
+                                        <EditDialog client={{ ...client }} />
                                     </TooltipTrigger>
                                     <TooltipContent>Edit client</TooltipContent>
                                 </Tooltip>

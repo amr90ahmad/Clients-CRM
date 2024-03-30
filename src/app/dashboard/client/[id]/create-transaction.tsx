@@ -55,17 +55,6 @@ import { TransactionSchema } from "@/app/lib/schemas";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import ServiceForm from "../../profile/services/add-service";
-const services = [
-    { label: "English", value: "en" },
-    { label: "French", value: "fr" },
-    { label: "German", value: "de" },
-    { label: "Spanish", value: "es" },
-    { label: "Portuguese", value: "pt" },
-    { label: "Russian", value: "ru" },
-    { label: "Japanese", value: "ja" },
-    { label: "Korean", value: "ko" },
-    { label: "Chinese", value: "zh" },
-] as const;
 
 export default function TransactionForm({
     id,
@@ -94,7 +83,7 @@ export default function TransactionForm({
         <Dialog>
             <DialogTrigger asChild>
                 {trigger === "button" ? (
-                    <Button className='bg-primary-1 text-neutral-100'>
+                    <Button >
                         Add Transaction
                     </Button>
                 ) : (
@@ -152,14 +141,14 @@ export default function TransactionForm({
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value='m@example.com'>
-                                                m@example.com
+                                            <SelectItem value='Service 1'>
+                                                Service 1
                                             </SelectItem>
-                                            <SelectItem value='m@google.com'>
-                                                m@google.com
+                                            <SelectItem value='Service 2'>
+                                                Service 2
                                             </SelectItem>
-                                            <SelectItem value='m@support.com'>
-                                                m@support.com
+                                            <SelectItem value='Service 3'>
+                                                Service 3
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>

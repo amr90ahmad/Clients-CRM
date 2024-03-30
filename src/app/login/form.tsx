@@ -114,10 +114,7 @@ export default function Form() {
                                 Please wait
                             </Button>
                         ) : (
-                            <Button
-                                type='submit'
-                                className='w-32 text-white bg-primary-1 hover:bg-primary-2'
-                            >
+                            <Button type='submit' className='w-32'>
                                 Login
                             </Button>
                         )}

@@ -1,15 +1,12 @@
 FIX:
-    - typescript
     - forms issues
         - user edit form (role, password)
         - use-hook-form coercion to string
     - handle delete dependancies
-    - optimize margin and padding
 
 Features:
-    - optimize charts, cards and tables ui from figma
+    - optimize charts, cards and tables
     - skeletons
-    - profile icon
     - export to excel
     - i18n
     - handle change & forget password
@@ -19,5 +16,3 @@ Features:
     - lead management
     - calendar and todo
     - customization
-
-    

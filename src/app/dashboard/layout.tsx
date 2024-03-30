@@ -4,12 +4,29 @@ import Provider from "@/components/Provider";
 import ModeToggle from "@/components/mode-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getServerSession } from "next-auth";
-import Logout from "@/components/logout";
 import { getUserByEmail } from "@/app/lib/data";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuPortal,
+    DropdownMenuSeparator,
+    DropdownMenuShortcut,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
+import Logout from '@/components/logout'
 
 export default async function layout({ children }: { children: ReactNode }) {
     const session = await getServerSession();
     const user = await getUserByEmail(session?.user?.email);
+
+    
     return (
         <main className='grid grid-cols-12 md:grid-cols-main'>
             <Provider>
@@ -25,13 +42,64 @@ export default async function layout({ children }: { children: ReactNode }) {
                     <div className='flex gap-2 ml-auto'>
                         <ModeToggle />
                         {/* <Logout /> */}
-                        <Avatar>
-                            <AvatarImage
-                                src='https://github.com/shadcn.png'
-                                alt='@shadcn'
-                            />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Avatar>
+                                    <AvatarImage
+                                        src='https://github.com/shadcn.png'
+                                        alt='@shadcn'
+                                    />
+                                    <AvatarFallback>CN</AvatarFallback>
+                                </Avatar>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className='w-56'>
+                                <DropdownMenuLabel>
+                                    My Account
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuGroup>
+                                    <Link href='/dashboard/profile'>
+                                        <DropdownMenuItem>
+                                            Profile
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <DropdownMenuItem>Billing</DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        Settings
+                                    </DropdownMenuItem>
+                                </DropdownMenuGroup>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuGroup>
+                                    <DropdownMenuItem>Team</DropdownMenuItem>
+                                    <DropdownMenuSub>
+                                        <DropdownMenuSubTrigger>
+                                            Invite users
+                                        </DropdownMenuSubTrigger>
+                                        <DropdownMenuPortal>
+                                            <DropdownMenuSubContent>
+                                                <DropdownMenuItem>
+                                                    Email
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem>
+                                                    Message
+                                                </DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem>
+                                                    More...
+                                                </DropdownMenuItem>
+                                            </DropdownMenuSubContent>
+                                        </DropdownMenuPortal>
+                                    </DropdownMenuSub>
+                                    <DropdownMenuItem>
+                                        New Team
+                                    </DropdownMenuItem>
+                                </DropdownMenuGroup>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>GitHub</DropdownMenuItem>
+                                <Logout/>
+                                <DropdownMenuSeparator />
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </header>
                 {children}

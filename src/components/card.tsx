@@ -5,7 +5,13 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-export default function CardComponent({ title = "Pageviews", info = "50.9K" }) {
+export default function CardComponent({
+    title,
+    info,
+}: {
+    title: string;
+    info: number;
+}) {
     return (
         <Card>
             <CardHeader>

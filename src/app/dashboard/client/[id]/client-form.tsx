@@ -117,7 +117,7 @@ export default function EditClientForm({ client }: { client: Client }) {
                             )}
                         />
                         <CardFooter className='flex justify-between items-center flex-wrap gap-4'>
-                            <Button className='w-100 '>Save changes</Button>
+                            <Button className='w-100'>Save changes</Button>
                             <TransactionForm id={id} trigger='button' />
                         </CardFooter>
                     </form>
