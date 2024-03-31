@@ -2,7 +2,7 @@
 
 import { Line } from "react-chartjs-2";
 import { CategoryScale } from "chart.js";
-import Chart from "chart.js/auto";
+import Chart,{defaults} from "chart.js/auto";
 import {
     Card,
     CardContent,
@@ -12,6 +12,8 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
+defaults.maintainAspectRatio = false;
+defaults.responsive = true;
 Chart.register(CategoryScale);
 
 const months = Array.from({ length: 12 }, (e, i) => {
@@ -22,13 +24,19 @@ const months = Array.from({ length: 12 }, (e, i) => {
 
 export default function LineChart() {
     const chartData = {
-        labels: [...months.slice(0, 7)],
+        labels: [...months],
         datasets: [
             {
-                label: "revenues",
-                data: [5500, 2300, 9600, 5500, 2300, 5500, 2300],
-                backgroundColor: "#C23AF6",
-                borderWidth: 1,
+                label: "Transactions",
+                data: [17, 12, 10, 22, 17, 12, 10, 22, 17, 12, 10, 22],
+                backgroundColor: "#62c3fe",
+                borderColor: "#62c3fe",
+            },
+            {
+                label: "Clients",
+                data: [7, 8, 10, 2, 7, 8, 10, 2, 7, 8, 10, 2],
+                backgroundColor: "#cb3cff",
+                borderColor: "#cb3cff",
             },
         ],
     };
@@ -36,22 +44,11 @@ export default function LineChart() {
         <>
             <Card>
                 <CardHeader>
-                    <CardTitle>Revenues</CardTitle>
+                    <CardTitle>2102</CardTitle>
+                    <CardDescription>Transactions</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Line
-                        data={chartData}
-                        options={{
-                            plugins: {
-                                title: {
-                                    display: false,
-                                },
-                                legend: {
-                                    display: false,
-                                },
-                            },
-                        }}
-                    />
+                    <Line data={chartData} />
                 </CardContent>
                 <CardFooter></CardFooter>
             </Card>

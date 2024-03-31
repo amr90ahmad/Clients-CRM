@@ -2,7 +2,7 @@
 
 import { Bar } from "react-chartjs-2";
 import { CategoryScale } from "chart.js";
-import Chart from "chart.js/auto";
+import Chart, { defaults } from "chart.js/auto";
 import {
     Card,
     CardContent,
@@ -12,6 +12,8 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
+defaults.maintainAspectRatio = false;
+defaults.responsive = true;
 Chart.register(CategoryScale);
 
 const months = Array.from({ length: 12 }, (e, i) => {
@@ -25,13 +27,20 @@ export default function BarChart() {
         labels: [...months],
         datasets: [
             {
-                label: "revenues",
+                label: "Revenues",
                 data: [
-                    5500, 2300, 9600, 5500, 2300, 9600, 5500, 2300, 9600, 5500,
-                    2300, 9600,
+                    11200, 8200, 4000, 11200, 8200, 4000, 11200, 8200, 4000,
+                    11200, 8200, 4000,
                 ],
-                backgroundColor: ["#c23af5", "#5dbaf4"],
-                borderWidth: 1,
+                backgroundColor: "#62c3fe",
+            },
+            {
+                label: "Income",
+                data: [
+                    5200, 2200, 1000, 5200, 2200, 1000, 5200, 2200, 1000, 5200,
+                    2200, 1000,
+                ],
+                backgroundColor: "#cb3cff",
             },
         ],
     };
@@ -39,28 +48,11 @@ export default function BarChart() {
         <>
             <Card>
                 <CardHeader>
-                    <CardTitle>Revenues</CardTitle>
+                    <CardTitle>$240K</CardTitle>
+                    <CardDescription>Revenues</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Bar
-                        data={chartData}
-                        options={{
-                            scales: {
-                                x: {
-                                    type: "category", // Specify x-axis scale type as 'category'
-                                },
-                            },
-                            plugins: {
-                                title: {
-                                    display: false,
-                                    text: "",
-                                },
-                                legend: {
-                                    display: false,
-                                },
-                            },
-                        }}
-                    />
+                    <Bar data={chartData} />
                 </CardContent>
                 <CardFooter></CardFooter>
             </Card>

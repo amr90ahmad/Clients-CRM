@@ -1,12 +1,15 @@
-FIX:
-    - forms issues
-        - user edit form (role, password)
-        - use-hook-form coercion to string
-    - handle delete dependancies
+Issues:
+    - typescript
+    - user edit form (role, password)
+    - use-hook-form coercion to string
+    - clients card false number
+    - app break on data retrieval
+    - can't delete clients or users because of dependancies
 
 Features:
-    - optimize charts, cards and tables
+    - optimize charts, cards and tables from figma
     - skeletons
+    - icon placeholders for users and clients
     - export to excel
     - i18n
     - handle change & forget password
