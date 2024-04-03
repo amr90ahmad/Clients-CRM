@@ -70,7 +70,12 @@ export default function EditClientForm({ client }: { client: Client }) {
                         action={formAction}
                         className='space-y-8'
                     >
-                        <input name='id' defaultValue={id} hidden readOnly />
+                        <input
+                            name='id'
+                            defaultValue={id}
+                            hidden
+                            readOnly
+                        />
                         <FormField
                             control={form.control}
                             name='name'
@@ -116,7 +121,7 @@ export default function EditClientForm({ client }: { client: Client }) {
                                 </FormItem>
                             )}
                         />
-                        <CardFooter className='flex justify-between items-center flex-wrap gap-4'>
+                        <CardFooter className='flex justify-between items-center flex-wrap p-0'>
                             <Button className='w-100'>Save changes</Button>
                             <TransactionForm id={id} trigger='button' />
                         </CardFooter>

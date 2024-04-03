@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { TableRowsSkeleton } from "@/components/skeletons";
 
 export default async function page({
     searchParams,
@@ -32,7 +33,7 @@ export default async function page({
                 </div>
                 <Search />
             </header>
-            <Suspense fallback='Loading...'>
+            <Suspense fallback={<TableRowsSkeleton />}>
                 <ClientsTable query={query} currentPage={currentPage} />
             </Suspense>
             {totalPages !== 0 && <Paginate totalPages={totalPages} />}

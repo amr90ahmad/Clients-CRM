@@ -85,7 +85,7 @@ export async function editUser(
     }
 
     const user = await getUserByEmail(session?.user?.email);
-    const { name, email, password, role, id } = parsed.data;
+    const { name, email, role, id } = parsed.data;
 
     if (user.id != id && user.role !== "admin")
         return { message: "Unauthenticated" };
@@ -120,6 +120,7 @@ export async function deleteUser(user_id: number) {
     const user = await getUserByEmail(session?.user?.email);
     if (user.role != "admin") return { message: "Unauthenticated" };
 
+    await sql`DELETE FROM clients where user_id = ${user_id}`;
     await sql`DELETE FROM users where id = ${user_id}`;
 
     revalidatePath("/dashboard/users");
@@ -208,6 +209,7 @@ export async function deleteClient(client_id: number, user_id: number) {
     if (user.id !== user_id && user.role !== "admin")
         return { message: "Unauthenticated" };
 
+    await sql`DELETE FROM transactions WHERE client_id = ${client_id}`;
     await sql`DELETE FROM clients WHERE id = ${client_id}`;
     revalidatePath("/dashboard/clients");
 }

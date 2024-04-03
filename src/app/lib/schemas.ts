@@ -12,7 +12,7 @@ export const userSchema = z.object({
     role: z.enum(["user", "admin"]),
 });
 
-export const editUserSchema = userSchema.extend({
+export const editUserSchema = userSchema.omit({ password: true }).extend({
     id: z.string().regex(/^\d+$/),
 });
 

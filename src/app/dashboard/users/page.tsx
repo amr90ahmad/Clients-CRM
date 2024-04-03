@@ -9,6 +9,7 @@ import Paginate from "@/components/pagination";
 import UserForm from "./create";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { TableRowsSkeleton } from "@/components/skeletons";
 
 export default async function page({
     searchParams,
@@ -34,7 +35,7 @@ export default async function page({
                 </div>
                 <Search />
             </header>
-            <Suspense fallback='Loading...'>
+            <Suspense fallback={<TableRowsSkeleton />}>
                 <UsersTable query={query} currentPage={currentPage} />
             </Suspense>
             {totalPages !== 0 && <Paginate totalPages={totalPages} />}

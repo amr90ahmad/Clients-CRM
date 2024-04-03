@@ -4,6 +4,8 @@ import Paginate from "@/components/pagination";
 import EditClientForm from "./client-form";
 import { getServerSession } from "next-auth";
 import { notFound, redirect } from "next/navigation";
+import { Suspense } from "react";
+import { TableRowsSkeleton, FormSkeleton } from "@/components/skeletons";
 
 export default async function page({
     params,
@@ -25,9 +27,13 @@ export default async function page({
 
     return (
         <>
-            <EditClientForm client={{ id, name, phone, address }} />
-            <TransactionsTable id={id} currentPage={currentPage} />
-            {totalPages !== 0 && <Paginate totalPages={totalPages} />}
+            <Suspense fallback={<FormSkeleton />}>
+                <EditClientForm client={{ id, name, phone, address }} />
+            </Suspense>
+            <Suspense fallback={<TableRowsSkeleton />}>
+                <TransactionsTable id={id} currentPage={currentPage} />
+                {totalPages !== 0 && <Paginate totalPages={totalPages} />}
+            </Suspense>
         </>
     );
 }

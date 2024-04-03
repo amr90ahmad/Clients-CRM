@@ -83,9 +83,7 @@ export default function TransactionForm({
         <Dialog>
             <DialogTrigger asChild>
                 {trigger === "button" ? (
-                    <Button >
-                        Add Transaction
-                    </Button>
+                    <Button>Add Transaction</Button>
                 ) : (
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
@@ -109,11 +107,13 @@ export default function TransactionForm({
                 <Form {...form}>
                     <form
                         ref={formRef}
-                        onSubmit={(evt) => {
+                        onSubmit={async (evt) => {
                             evt.preventDefault();
-                            form.handleSubmit(() => {
-                                formAction(new FormData(formRef.current!));
+                            const formData = new FormData(formRef.current!);
+                            await form.handleSubmit(() => {
+                                formAction(formData);
                             })(evt);
+                            form.reset();
                         }}
                         action={formAction}
                         className='space-y-8'

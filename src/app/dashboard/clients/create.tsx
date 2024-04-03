@@ -54,11 +54,13 @@ export default function ClientForm() {
                 <Form {...form}>
                     <form
                         ref={formRef}
-                        onSubmit={(evt) => {
+                        onSubmit={async (evt) => {
                             evt.preventDefault();
-                            form.handleSubmit(() => {
-                                formAction(new FormData(formRef.current!));
+                            const formData = new FormData(formRef.current!);
+                            await form.handleSubmit(() => {
+                                formAction(formData);
                             })(evt);
+                            form.reset();
                         }}
                         action={formAction}
                         className='space-y-8'

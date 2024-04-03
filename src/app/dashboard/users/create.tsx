@@ -54,9 +54,7 @@ export default function UserForm() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className=''>
-                    Add User
-                </Button>
+                <Button className=''>Add User</Button>
             </DialogTrigger>
             <DialogContent className='sm:max-w-[425px]'>
                 <DialogHeader>
@@ -66,11 +64,13 @@ export default function UserForm() {
                 <Form {...form}>
                     <form
                         ref={formRef}
-                        onSubmit={(evt) => {
+                        onSubmit={async (evt) => {
                             evt.preventDefault();
-                            form.handleSubmit(() => {
-                                formAction(new FormData(formRef.current!));
+                            const formData = new FormData(formRef.current!);
+                            await form.handleSubmit(() => {
+                                formAction(formData);
                             })(evt);
+                            form.reset();
                         }}
                         action={formAction}
                         className='space-y-8'

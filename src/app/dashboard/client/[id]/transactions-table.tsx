@@ -30,7 +30,7 @@ export default async function TransactionsTable({
 }) {
     const transactions = await fetchTransactions(id, currentPage);
     return (
-        <Table>
+        <Table className='mt-4'>
             <TableHeader>
                 <TableRow>
                     <TableHead>Date</TableHead>
@@ -41,7 +41,7 @@ export default async function TransactionsTable({
                     <TableHead className='text-center'>Action</TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody className=''>
+            <TableBody>
                 {transactions?.map((transaction) => (
                     <TableRow key={transaction.id}>
                         <TableCell className='font-medium'>
