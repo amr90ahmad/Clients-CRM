@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import {
     TransactionSchema,
+    changePasswordSchema,
     clientSchema,
     editClientSchema,
     editUserSchema,
@@ -107,6 +108,41 @@ export async function editUser(
 
         revalidatePath("/dashboard/users");
         return { message: "User Information updated successfully" };
+    } catch (e) {
+        console.error(e);
+        return { message: "Database Error" };
+    }
+}
+
+export async function changePassword(
+    prevState: FormState,
+    data: FormData
+): Promise<FormState> {
+    const session = await getServerSession();
+    if (!session) return { message: "Unauthenticated" };
+
+    const formData = Object.fromEntries(data);
+    const parsed = changePasswordSchema.safeParse(formData);
+
+    if (!parsed.success) {
+        console.log(parsed.error.message);
+        return { message: "Invalid form data" };
+    }
+
+    const user = await getUserByEmail(session?.user?.email);
+
+    const { id, password, confirmPassword } = parsed.data;
+
+    if (user.id != id && user.role !== "admin")
+        return { message: "Unauthenticated" };
+
+    try {
+        const hashedPassword = await hash(password, 10);
+
+        await sql`UPDATE users SET password = ${hashedPassword} WHERE id = ${id}`;
+
+        revalidatePath("/dashboard/users");
+        return { message: "Password updated successfully" };
     } catch (e) {
         console.error(e);
         return { message: "Database Error" };
@@ -256,7 +292,6 @@ export async function addService(
     prevState: FormState,
     data: FormData
 ): Promise<FormState> {
-    console.log("here");
     const session = await getServerSession();
     if (!session) return { message: "Unauthenticated" };
 

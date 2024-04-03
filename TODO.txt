@@ -1,16 +1,17 @@
 Issues:
     - typescript
-    - edit forms repeated inputs
+    - edit forms repeated name and email
     - Auth
 
 
 Features:
-    - services
-    - handle change & forget password
     - i18n
-    - export to excel
-    - sending emails
     - reports
-    - lead management
+    - export to excel
     - calendar and todo
+    - sending emails
+    - handle forget password
+    - lead management
     - customization
+    - SASS model
+    - PWA

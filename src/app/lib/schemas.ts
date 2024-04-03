@@ -16,6 +16,19 @@ export const editUserSchema = userSchema.omit({ password: true }).extend({
     id: z.string().regex(/^\d+$/),
 });
 
+export const changePasswordSchema = z
+    .object({
+        id: z.string().regex(/^\d+$/),
+        password: z
+            .string()
+            .min(10, { message: "Password must be at least 10 characters" }),
+        confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords don't match",
+        path: ["confirmPassword"],
+    });
+
 export const clientSchema = z.object({
     name: z
         .string()

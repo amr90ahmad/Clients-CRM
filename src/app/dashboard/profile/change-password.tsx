@@ -27,8 +27,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useFormState } from "react-dom";
 import { z } from "zod";
-import { editUserSchema } from "@/app/lib/schemas";
-import { editUser } from "@/app/lib/actions";
+import { changePasswordSchema } from "@/app/lib/schemas";
+import { changePassword } from "@/app/lib/actions";
 import { useRef } from "react";
 
 interface User {
@@ -38,16 +38,14 @@ interface User {
     password: string;
     role: string;
 }
-export default function UserForm({ user }: { user: any }) {
-    const { id, name, email, password, role } = user;
-    const [state, formAction] = useFormState(editUser, { message: "" });
-    const form = useForm<z.output<typeof editUserSchema>>({
-        resolver: zodResolver(editUserSchema),
+export default function PassowrdForm({ user_id }: { user_id: number }) {
+    const [state, formAction] = useFormState(changePassword, { message: "" });
+    const form = useForm<z.output<typeof changePasswordSchema>>({
+        resolver: zodResolver(changePasswordSchema),
         defaultValues: {
-            id: String(id),
-            name: name,
-            email: email,
-            role: role,
+            id: String(user_id),
+            password: "",
+            confirmPassword: "",
         },
     });
     const formRef = useRef<HTMLFormElement>(null);
@@ -67,56 +65,29 @@ export default function UserForm({ user }: { user: any }) {
                 }}
                 className='space-y-8'
             >
-                <input name='id' defaultValue={id} hidden readOnly />
+                <input name='id' defaultValue={user_id} hidden readOnly />
                 <FormField
                     control={form.control}
-                    name='name'
+                    name='password'
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Name</FormLabel>
+                            <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <Input placeholder={name} {...field} />
-                            </FormControl>
-
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name='email'
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                                <Input placeholder={email} {...field} />
+                                <Input type='password' {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-
                 <FormField
                     control={form.control}
-                    name='role'
+                    name='confirmPassword'
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Role</FormLabel>
-                            <Select
-                                onValueChange={field.onChange}
-                                defaultValue={role}
-                                {...field}
-                            >
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder='Select role' />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    <SelectItem value='user'>User</SelectItem>
-                                    <SelectItem value='admin'>Admin</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            <FormLabel>Confirm Password</FormLabel>
+                            <FormControl>
+                                <Input type='password' {...field} />
+                            </FormControl>
 
                             <FormMessage />
                         </FormItem>
@@ -127,7 +98,7 @@ export default function UserForm({ user }: { user: any }) {
                         <AlertDescription>{state.message}</AlertDescription>
                     </Alert>
                 )}
-                <Button className='w-100 '>Save changes</Button>
+                <Button className='w-100 '>Change Password</Button>
             </form>
         </Form>
     );

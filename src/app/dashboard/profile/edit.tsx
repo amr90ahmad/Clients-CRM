@@ -8,6 +8,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import UserForm from "@/app/dashboard/users/user-form";
+import PassowrdForm from "./change-password";
 
 interface User {
     id: number;
@@ -18,13 +19,23 @@ interface User {
 }
 export default function Form({ user }: { user: any }) {
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Profile</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <UserForm user={user} />
-            </CardContent>
-        </Card>
+        <>
+            <Card className='mb-4'>
+                <CardHeader>
+                    <CardTitle>Profile</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <UserForm user={user} />
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Change Password</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <PassowrdForm user_id={user.id} />
+                </CardContent>
+            </Card>
+        </>
     );
 }

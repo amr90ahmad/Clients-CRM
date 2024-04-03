@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { HomeIcon, UsersRound, Folders } from "lucide-react";
+import { HomeIcon, UsersRound, Folders, FilesIcon } from "lucide-react";
 
 const linkStyle = `cursor-pointer text-muted-foreground font-semibold flex gap-2 text-sm font-medium hover:text-primary items-center px-8 py-4`;
 
@@ -45,6 +45,15 @@ export default function Sidebar() {
             >
                 <Folders />
                 <span className='hidden md:block'>Clients</span>
+            </Link>
+            <Link
+                href='/dashboard/services'
+                className={`${linkStyle} ${
+                    active === "/dashboard/services" ? "text-primary" : ""
+                }`}
+            >
+                <FilesIcon />
+                <span className='hidden md:block'>Services</span>
             </Link>
         </>
     );
