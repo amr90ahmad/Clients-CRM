@@ -28,6 +28,7 @@ import { z } from "zod";
 import { editClientSchema } from "@/app/lib/schemas";
 import { editClient } from "@/app/lib/actions";
 import { useRef } from "react";
+import { QueryResultRow } from "@vercel/postgres";
 
 interface Client {
     id: number;
@@ -38,7 +39,7 @@ interface Client {
     email: string | null;
     created_at: Date;
 }
-export default function EditClientForm({ client }: { client: any }) {
+export default function EditClientForm({ client }: { client: QueryResultRow }) {
     const { id, user_id, name, phone, address } = client;
     const [state, formAction] = useFormState(editClient, { message: "" });
     const form = useForm<z.output<typeof editClientSchema>>({

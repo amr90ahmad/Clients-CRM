@@ -35,12 +35,18 @@ import { z } from "zod";
 import { createTransaction } from "@/app/lib/actions";
 import { useRef } from "react";
 import { TransactionSchema } from "@/app/lib/schemas";
+import { QueryResultRow } from "@vercel/postgres";
+import { FilePlus } from "lucide-react";
 
 export default function TransactionForm({
     id,
+    user_id,
+    services,
     trigger,
 }: {
     id: number;
+    user_id: number;
+    services: QueryResultRow[];
     trigger: string;
 }) {
     const [state, formAction] = useFormState(createTransaction, {
@@ -49,8 +55,9 @@ export default function TransactionForm({
     const form = useForm<z.output<typeof TransactionSchema>>({
         resolver: zodResolver(TransactionSchema),
         defaultValues: {
+            user_id: String(user_id),
             client_id: String(id),
-            service: "service 1",
+            service: "",
             cost: "",
             payment: "",
             date: "",
@@ -63,7 +70,10 @@ export default function TransactionForm({
         <Dialog>
             <DialogTrigger asChild>
                 {trigger === "button" ? (
-                    <Button>Add Transaction</Button>
+                    <Button className='flex gap-2 items-center'>
+                        <span>Add Transaction</span>
+                        <FilePlus />
+                    </Button>
                 ) : (
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
@@ -99,6 +109,12 @@ export default function TransactionForm({
                         className='space-y-8'
                     >
                         <input
+                            name='user_id'
+                            defaultValue={user_id}
+                            hidden
+                            readOnly
+                        />
+                        <input
                             name='client_id'
                             defaultValue={id}
                             hidden
@@ -117,19 +133,18 @@ export default function TransactionForm({
                                     >
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder='Select a verified email to display' />
+                                                <SelectValue placeholder='Select service' />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value='Service 1'>
-                                                Service 1
-                                            </SelectItem>
-                                            <SelectItem value='Service 2'>
-                                                Service 2
-                                            </SelectItem>
-                                            <SelectItem value='Service 3'>
-                                                Service 3
-                                            </SelectItem>
+                                            {services?.map((service) => (
+                                                <SelectItem
+                                                    value={service.name}
+                                                    key={service.id}
+                                                >
+                                                    {service.name}
+                                                </SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
 

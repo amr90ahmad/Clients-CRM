@@ -9,15 +9,9 @@ import {
 } from "@/components/ui/card";
 import UserForm from "@/app/dashboard/users/user-form";
 import PassowrdForm from "./change-password";
+import { QueryResultRow } from "@vercel/postgres";
 
-interface User {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-    role: string;
-}
-export default function Form({ user }: { user: any }) {
+export default function Form({ user }: { user: QueryResultRow }) {
     return (
         <>
             <Card className='mb-4'>

@@ -64,6 +64,17 @@ export default async function TransactionsTable({
                         </TableCell>
                     </TableRow>
                 ))}
+                <TableRow>
+                    <TableCell className='text-gray'>Total Balance</TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell>
+                        {transactions?.reduce((accumulator, currentValue) => {
+                            return accumulator + Number(currentValue.balance);
+                        }, 0)}
+                    </TableCell>
+                </TableRow>
             </TableBody>
         </Table>
     );

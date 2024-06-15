@@ -1,6 +1,5 @@
 "use client";
 
-
 import {
     Dialog,
     DialogContent,
@@ -11,15 +10,9 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import UserForm from "./user-form";
+import { QueryResultRow } from "@vercel/postgres";
 
-interface User {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-    role: string;
-}
-export default function EditDialog({ user }: { user: any }) {
+export default function EditDialog({ user }: { user: QueryResultRow }) {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -37,7 +30,7 @@ export default function EditDialog({ user }: { user: any }) {
                 <DialogHeader>
                     <DialogTitle>Edit user</DialogTitle>
                 </DialogHeader>
-                <UserForm user={user}/>
+                <UserForm user={user} />
             </DialogContent>
         </Dialog>
     );

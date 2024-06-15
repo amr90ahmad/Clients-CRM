@@ -12,7 +12,7 @@ export async function fetchUsers(query: string, currentPage: number) {
 
     try {
         const result = await sql`SELECT * FROM users 
-        WHERE
+        WHERE 
         email ILIKE ${`%${query}%`} OR
         role ILIKE ${`%${query}%`}
         ORDER BY id DESC
@@ -58,7 +58,7 @@ export async function fetchClients(query: string, currentPage: number) {
 
     try {
         const result = await sql`SELECT * FROM clients 
-        WHERE
+        WHERE 
         (name ILIKE ${`%${query}%`} OR
         phone ILIKE ${`%${query}%`} OR
         address ILIKE ${`%${query}%`})
@@ -185,31 +185,70 @@ export async function getCardsInfo() {
     noStore();
 
     const session = await getServerSession();
+    const user = await getUserByEmail(session?.user?.email);
+
     if (!session) return;
 
     try {
-        const numOfClientsPromise = sql`SELECT COUNT(*) FROM clients`;
-        const numOfUsersPromise = sql`SELECT COUNT(*) FROM users`;
-        const numOfTransactionsPromise = sql`SELECT COUNT(*) FROM transactions`;
-        const totalRevenuesPromise = sql`SELECT SUM(payment) FROM transactions`;
+        const numOfClientsPromise = sql`SELECT COUNT(*) FROM clients WHERE user_id = ${user.id}`;
+        const numOfTransactionsPromise = sql`SELECT COUNT(*) FROM transactions WHERE user_id = ${user.id}`;
+        const revenuesPromise = sql`SELECT SUM(cost) FROM transactions WHERE user_id = ${user.id}`;
+        const incomePromise = sql`SELECT SUM(payment) FROM transactions WHERE user_id = ${user.id}`;
 
         const data = await Promise.all([
             numOfClientsPromise,
-            numOfUsersPromise,
             numOfTransactionsPromise,
-            totalRevenuesPromise,
+            revenuesPromise,
+            incomePromise,
         ]);
 
         const numOfClients = Number(data[0].rows[0].count ?? "0");
-        const numOfUsers = Number(data[1].rows[0].count ?? "0");
-        const numOfTransactions = Number(data[2].rows[0].count ?? "0");
-        const totalRevenues = Number(data[3].rows[0].sum ?? "0");
+        const numOfTransactions = Number(data[1].rows[0].count ?? "0");
+        const revenues = Number(data[2].rows[0].sum ?? "0");
+        const income = Number(data[3].rows[0].count ?? "0");
 
         return {
             numOfClients,
-            numOfUsers,
             numOfTransactions,
-            totalRevenues,
+            revenues,
+            income,
+        };
+    } catch (error) {
+        console.error("Database Error:", error);
+    }
+}
+
+export async function getAdminCardsInfo() {
+    noStore();
+
+    const session = await getServerSession();
+    const user = await getUserByEmail(session?.user?.email);
+
+    if (user.role != "admin") return;
+
+    try {
+        const numOfUsersPromise = sql`SELECT COUNT(*) FROM users`;
+        const numOfClientsPromise = sql`SELECT COUNT(*) FROM clients`;
+        const numOfTransactionsPromise = sql`SELECT COUNT(*) FROM transactions`;
+        const revenuesPromise = sql`SELECT SUM(cost) FROM transactions`;
+
+        const data = await Promise.all([
+            numOfUsersPromise,
+            numOfClientsPromise,
+            numOfTransactionsPromise,
+            revenuesPromise,
+        ]);
+
+        const numOfUsers = Number(data[0].rows[0].count ?? "0");
+        const numOfClients = Number(data[1].rows[0].count ?? "0");
+        const numOfTransactions = Number(data[2].rows[0].count ?? "0");
+        const revenues = Number(data[3].rows[0].sum ?? "0");
+
+        return {
+            numOfUsers,
+            numOfClients,
+            numOfTransactions,
+            revenues,
         };
     } catch (error) {
         console.error("Database Error:", error);

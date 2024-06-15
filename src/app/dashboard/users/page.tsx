@@ -22,7 +22,7 @@ export default async function page({
     const session = await getServerSession();
     if (!session) redirect("/login");
     const user = await getUserByEmail(session.user?.email);
-    if (user.role != "admin") redirect("/dashboard");
+    if (user?.role != "admin") redirect("/dashboard");
     const query = searchParams?.query || "";
     const currentPage = Number(searchParams?.page) || 1;
     const totalPages = await fetchUsersPages(query);
@@ -36,9 +36,11 @@ export default async function page({
                 <Search />
             </header>
             <Suspense fallback={<TableRowsSkeleton />}>
-                <UsersTable query={query} currentPage={currentPage} />
+                <div className='h-[100vh] flex flex-col justify-between'>
+                    <UsersTable query={query} currentPage={currentPage} />
+                    {totalPages !== 0 && <Paginate totalPages={totalPages} />}
+                </div>
             </Suspense>
-            {totalPages !== 0 && <Paginate totalPages={totalPages} />}
         </>
     );
 }

@@ -37,6 +37,7 @@ import { z } from "zod";
 import { userSchema } from "@/app/lib/schemas";
 import { createUser } from "@/app/lib/actions";
 import { useRef } from "react";
+import { UserPlus } from "lucide-react";
 
 export default function UserForm() {
     const [state, formAction] = useFormState(createUser, { message: "" });
@@ -54,7 +55,10 @@ export default function UserForm() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className=''>Add User</Button>
+                <Button className='flex gap-2 items-center'>
+                    <span> Add User </span>
+                    <UserPlus />
+                </Button>
             </DialogTrigger>
             <DialogContent className='sm:max-w-[425px]'>
                 <DialogHeader>

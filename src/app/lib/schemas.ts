@@ -42,6 +42,7 @@ export const editClientSchema = clientSchema.extend({
 });
 
 export const TransactionSchema = z.object({
+    user_id: z.string(),
     client_id: z.string(),
     service: z.string(),
     cost: z.string().regex(/^\d+$/, { message: "Input must be a number" }),

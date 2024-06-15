@@ -34,9 +34,11 @@ export default async function page({
                 <Search />
             </header>
             <Suspense fallback={<TableRowsSkeleton />}>
-                <ClientsTable query={query} currentPage={currentPage} />
+                <div className='h-[100vh] flex flex-col justify-between'>
+                    <ClientsTable query={query} currentPage={currentPage} />
+                    {totalPages !== 0 && <Paginate totalPages={totalPages} />}
+                </div>
             </Suspense>
-            {totalPages !== 0 && <Paginate totalPages={totalPages} />}
         </>
     );
 }

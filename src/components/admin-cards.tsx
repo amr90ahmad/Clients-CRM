@@ -1,28 +1,28 @@
-import { getCardsInfo } from "@/app/lib/data";
+import React from "react";
+import { getAdminCardsInfo } from "../app/lib/data";
 import CardComponent from "@/components/card";
 
-export default async function Cards() {
-    const cardsInfo = await getCardsInfo();
+export default async function AdminCards() {
+    const cardsInfo = await getAdminCardsInfo();
 
     if (
         !cardsInfo ||
-        !cardsInfo.numOfClients ||
         !cardsInfo.numOfUsers ||
+        !cardsInfo.numOfClients ||
         !cardsInfo.numOfTransactions ||
-        !cardsInfo.totalRevenues
+        !cardsInfo.revenues
     ) {
         return null;
     }
 
-    const { numOfClients, numOfUsers, numOfTransactions, totalRevenues } =
-        cardsInfo;
+    const { numOfClients, numOfUsers, numOfTransactions, revenues } = cardsInfo;
 
     return (
         <div className='grid grid-col-1 md:grid-cols-2 xl:grid-cols-4 gap-4'>
             <CardComponent title='Users' info={numOfUsers} />
             <CardComponent title='Clients' info={numOfClients} />
             <CardComponent title='Transactions' info={numOfTransactions} />
-            <CardComponent title='Total Revenues' info={totalRevenues} />
+            <CardComponent title='Revenues' info={revenues} />
         </div>
     );
 }

@@ -67,7 +67,7 @@ export default function Form() {
                             <Input
                                 className='w-full p-2 border border-border-clr rounded'
                                 id='username'
-                                placeholder='Enter your email'
+                                defaultValue='user@gmail.com'
                                 required
                                 type='email'
                                 {...register("email", {
@@ -91,7 +91,7 @@ export default function Form() {
                             <Input
                                 className='w-full p-2 border border-border-clr rounded'
                                 id='password'
-                                placeholder='Enter your password'
+                                defaultValue='1234567890'
                                 required
                                 type='password'
                                 {...register("password")}

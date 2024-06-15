@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import Cards from "./cards";
+import UserCards from "@/components/user-cards";
 import BarChart from "@/components/charts/bar-chart";
 import LineChart from "@/components/charts/line-chart";
 import TransactionsTable from "./client/[id]/transactions-table";
@@ -13,15 +13,18 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { CardsSkeleton } from "@/components/skeletons";
+import { CardsSkeleton, TableRowsSkeleton } from "@/components/skeletons";
+import { getUserByEmail } from "../lib/data";
+import AdminCards from "@/components/admin-cards";
 
 export default async function page() {
     const session = await getServerSession();
+    const user = await getUserByEmail(session?.user?.email);
     if (!session) redirect("/login");
     return (
         <>
             <Suspense fallback={<CardsSkeleton />}>
-                <Cards />
+                {user?.role === "admin" ? <AdminCards /> : <UserCards />}
             </Suspense>
             <div className='grid grid-cols-2 my-4 gap-4'>
                 <div className='col-span-2 lg:col-span-1'>
@@ -33,14 +36,16 @@ export default async function page() {
                 <div className='col-span-2'>
                     <Card>
                         <CardHeader>
-                            {/* <CardTitle>2102</CardTitle> */}
                             <CardDescription>
                                 Recent Transactions
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <Suspense fallback={"Loading..."}>
-                                <TransactionsTable currentPage={1} id={1} />
+                            <Suspense fallback={<TableRowsSkeleton />}>
+                                <TransactionsTable
+                                    currentPage={1}
+                                    id={user?.id}
+                                />
                             </Suspense>
                         </CardContent>
                     </Card>

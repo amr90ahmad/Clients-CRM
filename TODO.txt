@@ -1,16 +1,16 @@
-Issues:
-    - typescript
-    - edit forms repeated name and email
-    - Auth
-
+todo:
+    - user avatar & admin highlight
 
 Features:
+    - real charts info
     - i18n
-    - reports
+    - print
     - export to excel
-    - calendar and todo
+    - notifications
+    - tasks
     - sending emails
     - handle forget password
+    
     - lead management
     - customization
     - SASS model

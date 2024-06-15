@@ -97,10 +97,10 @@ export async function editUser(
         const repeatedEmail = users.rows.find((user) => user.email == email);
         const repeatedName = users.rows.find((user) => user.name == name);
 
-        if (repeatedEmail) {
+        if (repeatedEmail && user.email != email) {
             return { message: "Email is already exists" };
         }
-        if (repeatedName) {
+        if (repeatedName && user.name != name) {
             return { message: "Name is already exists" };
         }
 
@@ -265,12 +265,13 @@ export async function createTransaction(
         return { message: parsed.error.message };
     }
 
-    const { service, cost, payment, date, comment, client_id } = parsed?.data;
+    const { service, cost, payment, date, comment, client_id, user_id } =
+        parsed?.data;
     const balance = Number(cost) - Number(payment);
 
     try {
-        await sql`INSERT INTO transactions (service, cost, payment, balance, date, comment, client_id)
-            VALUES (${service}, ${cost}, ${payment}, ${balance}, ${date.toLocaleString()},${comment}, ${client_id})`;
+        await sql`INSERT INTO transactions (service, cost, payment, balance, date, comment, client_id, user_id)
+            VALUES (${service}, ${cost}, ${payment}, ${balance}, ${date.toLocaleString()}, ${comment}, ${client_id}, ${user_id})`;
 
         revalidatePath(`/dashbboard/client/${client_id}`);
         return { message: "Transaction created successfully" };
@@ -339,5 +340,5 @@ export async function setLogoutStatus() {
     const session = await getServerSession();
     const user = await getUserByEmail(session?.user?.email);
 
-    await sql`UPDATE users SET status = false WHERE id = ${user.id}`;
+    await sql`UPDATE users SET status = false WHERE id = ${user?.id}`;
 }

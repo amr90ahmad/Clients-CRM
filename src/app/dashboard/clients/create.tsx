@@ -28,6 +28,7 @@ import { z } from "zod";
 import { clientSchema } from "@/app/lib/schemas";
 import { createClient } from "@/app/lib/actions";
 import { useRef } from "react";
+import { FolderPlus } from "lucide-react";
 
 export default function ClientForm() {
     const [state, formAction] = useFormState(createClient, { message: "" });
@@ -44,7 +45,10 @@ export default function ClientForm() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button>Add Client</Button>
+                <Button className='flex gap-2 items-center'>
+                    <span>Add Client</span>
+                    <FolderPlus />
+                </Button>
             </DialogTrigger>
             <DialogContent className='sm:max-w-[425px]'>
                 <DialogHeader>

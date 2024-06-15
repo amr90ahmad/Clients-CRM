@@ -16,12 +16,13 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { fetchClients } from "@/app/lib/data";
+import { fetchClients, fetchServices, getUserByEmail } from "@/app/lib/data";
 import DeleteDialog from "./delete";
 import EditDialog from "./edit";
 import Link from "next/link";
 import TransactionForm from "./../client/[id]/create-transaction";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { getServerSession } from "next-auth";
 
 export default async function ClientsTable({
     query,
@@ -30,10 +31,13 @@ export default async function ClientsTable({
     query: string;
     currentPage: number;
 }) {
+    const session = await getServerSession();
+    const user = await getUserByEmail(session?.user?.email);
     const clients = await fetchClients(query, currentPage);
+    const services = await fetchServices();
 
     return (
-        <Table className='overflow-auto max-h-[50vh]'>
+        <Table>
             <TableHeader>
                 <TableRow>
                     <TableHead>Name</TableHead>
@@ -58,6 +62,8 @@ export default async function ClientsTable({
                                     <TooltipTrigger>
                                         <TransactionForm
                                             id={client.id}
+                                            user_id={user.id}
+                                            services={services}
                                             trigger='icon'
                                         />
                                     </TooltipTrigger>
@@ -70,7 +76,7 @@ export default async function ClientsTable({
                                 <Tooltip>
                                     <TooltipTrigger>
                                         {" "}
-                                        <EditDialog client={{ ...client }} />
+                                        <EditDialog client={client} />
                                     </TooltipTrigger>
                                     <TooltipContent>Edit client</TooltipContent>
                                 </Tooltip>
