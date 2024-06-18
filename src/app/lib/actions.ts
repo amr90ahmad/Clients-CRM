@@ -172,6 +172,8 @@ export async function createClient(
     const formData = Object.fromEntries(data);
     const parsed = clientSchema.safeParse(formData);
 
+    console.log(data);
+
     if (!parsed.success) {
         return { message: "Invalid form data" };
     }

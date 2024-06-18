@@ -61,7 +61,6 @@ export default function PassowrdForm({ user_id }: { user_id: number }) {
                     await form.handleSubmit(() => {
                         formAction(formData);
                     })(evt);
-                    form.reset();
                 }}
                 className='space-y-8'
             >

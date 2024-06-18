@@ -63,7 +63,6 @@ export default function UserForm({ user }: { user: any }) {
                     await form.handleSubmit(() => {
                         formAction(formData);
                     })(evt);
-                    form.reset();
                 }}
                 className='space-y-8'
             >

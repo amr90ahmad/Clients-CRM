@@ -2,8 +2,6 @@ import Search from "@/components/search";
 
 import UsersTable from "./table";
 import { Suspense } from "react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { fetchUsersPages, getUserByEmail } from "@/app/lib/data";
 import Paginate from "@/components/pagination";
 import UserForm from "./create";

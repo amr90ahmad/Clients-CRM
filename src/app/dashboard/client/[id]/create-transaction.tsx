@@ -103,7 +103,6 @@ export default function TransactionForm({
                             await form.handleSubmit(() => {
                                 formAction(formData);
                             })(evt);
-                            form.reset();
                         }}
                         action={formAction}
                         className='space-y-8'
